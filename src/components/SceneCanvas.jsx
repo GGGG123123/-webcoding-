@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber'
-import { ContactShadows, Environment, OrbitControls } from '@react-three/drei'
+import { ContactShadows, OrbitControls } from '@react-three/drei'
 import { ACESFilmicToneMapping, SRGBColorSpace } from 'three'
 import { VehicleModel } from './VehicleModel.jsx'
 
@@ -23,7 +23,7 @@ export function SceneCanvas({
     >
       <Canvas
         shadows="basic"
-        dpr={[1.5, 2.5]}
+        dpr={[1, 1.75]}
         camera={cameraSettings}
         gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
         onCreated={({ gl }) => {
@@ -51,7 +51,6 @@ export function SceneCanvas({
           intensity={10}
           color="#e7f5ff"
         />
-        <Environment preset="city" environmentIntensity={0.52} />
 
         <group position={[0, -0.08, 0]} scale={vehicleScale}>
           <VehicleModel

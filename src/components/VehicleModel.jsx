@@ -1,9 +1,25 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { Component, lazy, Suspense, useEffect, useState } from 'react'
 import { Html } from '@react-three/drei'
 import { CarModel as GeometryCarModel } from './CarModel.jsx'
 
 const NIO_ET7_MODEL_URL = `${import.meta.env.BASE_URL}models/nio-et7/scene.gltf`
 const NioEt7Model = lazy(() => import('./NioEt7Model.jsx'))
+
+class ModelErrorBoundary extends Component {
+  state = { hasError: false }
+
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback
+    }
+
+    return this.props.children
+  }
+}
 
 function useModelAvailability() {
   const [status, setStatus] = useState('checking')
@@ -74,24 +90,44 @@ function MissingModelFallback({ carState, onDoorToggle, onWindowToggle }) {
 export function VehicleModel({ carState, onDoorToggle, onWindowToggle }) {
   const modelStatus = useModelAvailability()
 
+  if (modelStatus === 'checking') {
+    return (
+      <ModelLoadingFallback
+        carState={carState}
+        onDoorToggle={onDoorToggle}
+        onWindowToggle={onWindowToggle}
+      />
+    )
+  }
+
   if (modelStatus === 'available') {
     return (
-      <Suspense
+      <ModelErrorBoundary
         fallback={
-          <ModelLoadingFallback
+          <MissingModelFallback
             carState={carState}
             onDoorToggle={onDoorToggle}
             onWindowToggle={onWindowToggle}
           />
         }
-        >
-        <NioEt7Model
-          carState={carState}
-          modelUrl={NIO_ET7_MODEL_URL}
-          onDoorToggle={onDoorToggle}
-          onWindowToggle={onWindowToggle}
-        />
-      </Suspense>
+      >
+        <Suspense
+          fallback={
+            <ModelLoadingFallback
+              carState={carState}
+              onDoorToggle={onDoorToggle}
+              onWindowToggle={onWindowToggle}
+            />
+          }
+          >
+          <NioEt7Model
+            carState={carState}
+            modelUrl={NIO_ET7_MODEL_URL}
+            onDoorToggle={onDoorToggle}
+            onWindowToggle={onWindowToggle}
+          />
+        </Suspense>
+      </ModelErrorBoundary>
     )
   }
 
