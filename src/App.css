@@ -407,6 +407,7 @@ button:focus-visible {
 .drive-mode-title {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 7px;
   margin-bottom: 12px;
   color: #203246;
