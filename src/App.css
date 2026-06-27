@@ -324,7 +324,7 @@ button:focus-visible {
   min-height: 0;
   overflow: hidden;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(221, 233, 244, 0.2)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(205, 224, 240, 0.06)),
     var(--scene-bg-image) center / cover no-repeat,
     #e9f1f8;
 }
@@ -340,9 +340,9 @@ button:focus-visible {
 
 .scene-shell::before {
   background:
-    radial-gradient(ellipse at 50% 76%, rgba(255, 255, 255, 0.42), transparent 28%),
-    radial-gradient(ellipse at 50% 82%, rgba(119, 167, 207, 0.2), transparent 36%),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.34), transparent 22%, transparent 78%, rgba(255, 255, 255, 0.22));
+    radial-gradient(ellipse at 50% 76%, rgba(255, 255, 255, 0.24), transparent 28%),
+    radial-gradient(ellipse at 50% 82%, rgba(119, 167, 207, 0.1), transparent 36%),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12), transparent 22%, transparent 78%, rgba(255, 255, 255, 0.08));
   mix-blend-mode: screen;
 }
 
@@ -350,9 +350,9 @@ button:focus-visible {
   top: auto;
   height: 34%;
   background:
-    radial-gradient(ellipse at 50% 34%, rgba(255, 255, 255, 0.42), transparent 10%),
-    radial-gradient(ellipse at 50% 34%, rgba(113, 160, 201, 0.2), transparent 38%);
-  opacity: 0.58;
+    radial-gradient(ellipse at 50% 34%, rgba(255, 255, 255, 0.22), transparent 10%),
+    radial-gradient(ellipse at 50% 34%, rgba(113, 160, 201, 0.12), transparent 38%);
+  opacity: 0.34;
 }
 
 .scene-shell canvas {

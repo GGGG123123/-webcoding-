@@ -1,6 +1,7 @@
 import { Canvas } from '@react-three/fiber'
 import { ContactShadows, OrbitControls } from '@react-three/drei'
 import { ACESFilmicToneMapping, SRGBColorSpace } from 'three'
+import { publicAssetUrl } from '../utils/publicAsset.js'
 import { VehicleModel } from './VehicleModel.jsx'
 
 export function SceneCanvas({
@@ -18,7 +19,7 @@ export function SceneCanvas({
     <div
       className="scene-shell"
       style={{
-        '--scene-bg-image': `url("${import.meta.env.BASE_URL}images/misty-stage-bg.png")`,
+        '--scene-bg-image': `url("${publicAssetUrl('images/misty-stage-bg.png')}")`,
       }}
     >
       <Canvas

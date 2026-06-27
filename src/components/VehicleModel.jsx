@@ -1,8 +1,9 @@
 import { Component, lazy, Suspense, useEffect, useState } from 'react'
 import { Html } from '@react-three/drei'
+import { publicAssetUrl } from '../utils/publicAsset.js'
 import { CarModel as GeometryCarModel } from './CarModel.jsx'
 
-const NIO_ET7_MODEL_URL = `${import.meta.env.BASE_URL}models/nio-et7/scene.gltf`
+const NIO_ET7_MODEL_URL = publicAssetUrl('models/nio-et7/scene.gltf')
 const NioEt7Model = lazy(() => import('./NioEt7Model.jsx'))
 
 class ModelErrorBoundary extends Component {
@@ -26,24 +27,40 @@ function useModelAvailability() {
 
   useEffect(() => {
     let cancelled = false
+    const wait = (duration) =>
+      new Promise((resolve) => {
+        window.setTimeout(resolve, duration)
+      })
 
     async function checkModel() {
-      try {
-        const response = await fetch(NIO_ET7_MODEL_URL, {
-          cache: 'no-store',
-        })
-        const text = await response.text()
-        const looksLikeGltf =
-          text.trimStart().startsWith('{') &&
-          text.includes('"asset"')
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        try {
+          const response = await fetch(NIO_ET7_MODEL_URL, {
+            cache: 'no-store',
+          })
+          const text = await response.text()
+          const looksLikeGltf =
+            response.ok &&
+            text.trimStart().startsWith('{') &&
+            text.includes('"asset"')
 
-        if (!cancelled) {
-          setStatus(response.ok && looksLikeGltf ? 'available' : 'missing')
+          if (looksLikeGltf) {
+            if (!cancelled) {
+              setStatus('available')
+            }
+            return
+          }
+        } catch {
+          // Retry once or twice before falling back to the geometric model.
         }
-      } catch {
-        if (!cancelled) {
-          setStatus('missing')
+
+        if (!cancelled && attempt < 2) {
+          await wait(800 * (attempt + 1))
         }
+      }
+
+      if (!cancelled) {
+        setStatus('missing')
       }
     }
 
